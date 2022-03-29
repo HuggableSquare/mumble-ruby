@@ -3,7 +3,7 @@ require 'wavefile'
 module Mumble
   class AudioPlayer
     include ThreadTools
-    COMPRESSED_SIZE = 960
+    COMPRESSED_SIZE = 1920
 
     def initialize(type, connection, sample_rate, bitrate)
       @packet_header = (type << 5).chr
@@ -54,7 +54,7 @@ module Mumble
 
     private
     def create_encoder(sample_rate, bitrate)
-      @encoder = Opus::Encoder.new sample_rate, sample_rate / 100, 1
+      @encoder = Opus::Encoder.new sample_rate, sample_rate / 100, 2
       @encoder.vbr_rate = 0 # CBR
       @encoder.bitrate = bitrate
     end
@@ -73,7 +73,7 @@ module Mumble
     end
 
     def produce
-      encode_sample @file.read(@encoder.frame_size * 2)
+      encode_sample @file.read(@encoder.frame_size * 4)
     end
 
     def encode_sample(sample)
